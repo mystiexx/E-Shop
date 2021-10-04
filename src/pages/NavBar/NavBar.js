@@ -4,7 +4,7 @@ import { Link, useLocation } from "react-router-dom";
 import { Badge } from "@material-ui/core";
 import { BsBag } from "react-icons/bs";
 
-const NavBar = ({ totalItems }) => {
+const NavBar = ({ totalItems, handleSearch }) => {
     const location = useLocation();
     
 
@@ -30,7 +30,7 @@ const NavBar = ({ totalItems }) => {
                         <Spacer />
                         <Box mr={4}>
                             {" "}
-                            <Input placeholder="Search..." />{" "}
+                            <Input placeholder="Search..." onChange={handleSearch}/>{" "}
                         </Box>
 
                         {location.pathname !== "/cart" ? (

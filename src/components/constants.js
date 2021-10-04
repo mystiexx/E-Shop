@@ -8,5 +8,5 @@ LANDING: '/',
 HOME: '/home',
 CART: '/cart',
 CHECKOUT: '/checkout',
-CATEGORY: '/category'
+CATEGORY: '/category/:id'
 }

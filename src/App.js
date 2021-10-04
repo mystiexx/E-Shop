@@ -8,25 +8,39 @@ import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import Checkout from "./pages/Checkout/Checkout";
 import HomePage from "./pages/LandingPage/Index";
 import Other from "./pages/Home/Other";
-import { useHistory } from "react-router-dom";
 import { PUBLIC_PATHS } from "./components/constants";
 import PageSpinner from "./components/FullPageSpinner";
 
-const App = () => {
+const App = ({ props }) => {
     const [cart, setCart] = useState({});
     const [order, setOrder] = useState({});
     const [errorMessage, setErrorMessage] = useState(" ");
     const [categories, setCategories] = useState([]);
     const [products, setProducts] = useState([]);
-    const [category, setCategory] = useState({});
+    const [product, setProduct] = useState([]);
+
     const [loading, setLoading] = useState(true);
 
-    let history = useHistory();
+    console.log(products)
+
+    const handleSearch = (e) => {
+        let string = e.target.value;
+        if(string ===" ") {
+            setProducts(products)
+        } else {
+            let data = product.filter(
+                (content ) => 
+                content.name.toLowerCase().includes(string.toLowerCase())
+            );
+            setProducts(data)
+        }
+    }
 
     const fetchProducts = async () => {
         try {
             const { data } = await commerce.products.list();
-            setProducts(data);
+            setProducts(data) ||
+            setProduct(data) ||
             setLoading(false);
         } catch (err) {
             console.log(err);
@@ -38,17 +52,6 @@ const App = () => {
         setCategories(data);
     };
 
-    const fetchCategory = async (categoryId) => {
-        try {
-            let { category } = await commerce.categories.retrieve(categoryId);
-            setCategory(category.products);
-        } catch (err) {
-            console.log(err);
-        }
-        console.log(category)
-        history.push({ pathname: PUBLIC_PATHS.CATEGORY, state: { ...category } });
-    };
-
     const fetchCart = async () => {
         setCart(await commerce.cart.retrieve());
     };
@@ -58,7 +61,7 @@ const App = () => {
 
         setCart(cart);
     };
- 
+
     const handleUpdateCartQty = async (productId, quantity) => {
         const { cart } = await commerce.cart.update(productId, { quantity });
 
@@ -107,7 +110,7 @@ const App = () => {
             ) : (
                 <Router>
                     <VStack>
-                        <NavBar totalItems={cart.total_items} />
+                        <NavBar totalItems={cart.total_items} handleSearch={handleSearch}/>
                         <Switch>
                             <Route exact path={PUBLIC_PATHS.LANDING}>
                                 <HomePage
@@ -122,12 +125,16 @@ const App = () => {
                                     onAddToCart={handleAddToCart}
                                     categories={categories}
                                     products={products}
-                                    fetchCategory={fetchCategory}
+                                    {...props}
                                 />
                             </Route>
 
                             <Route exact path={PUBLIC_PATHS.CATEGORY}>
-                                <Other category={category} />
+                                <Other
+                                    categories={categories}
+                                    products={products}
+                                    onAddToCart={handleAddToCart}
+                                />
                             </Route>
 
                             <Route exact path={PUBLIC_PATHS.CART}>

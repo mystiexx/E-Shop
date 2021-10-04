@@ -1,4 +1,4 @@
-import { Grid, Box, Text, Container, Button, Image, Flex } from "@chakra-ui/react";
+import { Grid, Box, Text, Container, Button, Image, Flex, Spacer } from "@chakra-ui/react";
 import { useMediaQuery } from "@chakra-ui/media-query";
 import {
     Accordion,
@@ -10,7 +10,7 @@ import {
 import { IoBagAddOutline } from "react-icons/io5";
 import Categories from "../../components/Categories";
 
-const Home = ({ onAddToCart, categories, products, fetchCategory }) => {
+const Home = ({ onAddToCart, categories, products,  }) => {
     const [isNotSmallerScreen] = useMediaQuery("(min-width: 600px)");
 
     if (!products) return "loading...";
@@ -29,7 +29,7 @@ const Home = ({ onAddToCart, categories, products, fetchCategory }) => {
                                 </AccordionButton>
                             </h2>
                             <AccordionPanel pb={4}>
-                                <Categories categories={categories} fetchCategory={fetchCategory} />
+                                <Categories categories={categories} />
                             </AccordionPanel>
                         </AccordionItem>
 
@@ -43,10 +43,7 @@ const Home = ({ onAddToCart, categories, products, fetchCategory }) => {
                                 </AccordionButton>
                             </h2>
                             <AccordionPanel pb={4}>
-                                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-                                eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim
-                                ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut
-                                aliquip ex ea commodo consequat.
+                               
                             </AccordionPanel>
                         </AccordionItem>
                     </Accordion>
@@ -87,9 +84,10 @@ const Home = ({ onAddToCart, categories, products, fetchCategory }) => {
                                                 __html: product.description,
                                             }}
                                         />
+                                        <Flex>
                                         <Text>{product.price.formatted_with_symbol}</Text>
-
-                                        <Box
+                                                <Spacer/>
+                                                <Box
                                             as={Button}
                                             bg="transparent"
                                             onClick={() => onAddToCart(product.id, 1)}
@@ -97,6 +95,10 @@ const Home = ({ onAddToCart, categories, products, fetchCategory }) => {
                                         >
                                             <IoBagAddOutline size="30px" />
                                         </Box>
+                                            </Flex>
+                                 
+
+                                      
                                     </Box>
                                 </Box>
                             ))}
